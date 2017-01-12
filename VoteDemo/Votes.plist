@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>data</key>
+	<array>
+		<dict>
+			<key>voteStr</key>
+			<string>选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一</string>
+			<key>progressScale</key>
+			<string>10</string>
+			<key>progressNum</key>
+			<string>102</string>
+		</dict>
+		<dict>
+			<key>voteStr</key>
+			<string>选项二选项二选项二选项二选项二选项二选项二选项二选项二选项二</string>
+			<key>progressScale</key>
+			<string>20</string>
+			<key>progressNum</key>
+			<string>234</string>
+		</dict>
+		<dict>
+			<key>voteStr</key>
+			<string>选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三选项三</string>
+			<key>progressScale</key>
+			<string>30</string>
+			<key>progressNum</key>
+			<string>356</string>
+		</dict>
+		<dict>
+			<key>voteStr</key>
+			<string>选项四</string>
+			<key>progressScale</key>
+			<string>25</string>
+			<key>progressNum</key>
+			<string>254</string>
+		</dict>
+		<dict>
+			<key>voteStr</key>
+			<string>选项五</string>
+			<key>progressScale</key>
+			<string>5</string>
+			<key>progressNum</key>
+			<string>63</string>
+		</dict>
+	</array>
+</dict>
+</plist>
