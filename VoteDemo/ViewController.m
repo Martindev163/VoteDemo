@@ -11,10 +11,15 @@
 #import "VoteView.h"
 #import "Defines.h"
 
-@interface ViewController ()
+@interface ViewController ()<VoteViewDelegate>
 
 @property (nonatomic, strong) NSArray *voteArr;
 
+//@property (nonatomic, strong) UIView *testView;
+@property (nonatomic, strong) VoteView *voteView;
+@property (weak, nonatomic) IBOutlet UIView *topView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *height;
+@property (weak, nonatomic) IBOutlet UIView *bottomView;
 @end
 
 @implementation ViewController
@@ -23,16 +28,34 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    VoteView *voteV = [[VoteView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT)];
-    
-    [voteV loadVoteTableViewWithVotesArray:self.voteArr type:SingleSelectType viewHeight:^(CGFloat ViewHeight) {
-        CGRect tempFrame = voteV.frame;
+    _voteView = [[VoteView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    _voteView.delegate = self;
+    [_voteView loadVoteTableViewWithVotesArray:self.voteArr type:SingleSelectType viewHeight:^(CGFloat ViewHeight) {
+        CGRect tempFrame = _voteView.frame;
         tempFrame.size.height = ViewHeight;
-        voteV.frame = tempFrame;
+        _voteView.frame = tempFrame;
     }];
+    _height.constant = _voteView.frame.size.height;
+    [self.view setNeedsLayout];
+    [self.topView addSubview:_voteView];
     
-    [self.view addSubview:voteV];
+    /*
+     _testView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_voteView.frame), SCREEN_WIDTH, 10)];
+     _testView.backgroundColor = [UIColor redColor];
+     [self.view addSubview:_testView];
+     */
     
+}
+
+-(void)changeHeightChangeUIMethod
+{
+    /*代码实现view和其他空间的间距
+     CGRect tempRect = _testView.frame;
+     tempRect.origin.y = CGRectGetMaxY(_voteView.frame);
+     _testView.frame = tempRect;
+     */
+    _height.constant = _voteView.frame.size.height;
+    [self.view setNeedsLayout];
 }
 
 -(NSArray *)voteArr

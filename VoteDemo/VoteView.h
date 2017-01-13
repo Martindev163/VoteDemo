@@ -15,7 +15,15 @@ typedef enum : NSUInteger {
 
 typedef void(^ViewHeightBlock) (CGFloat ViewHeight);
 
+@protocol VoteViewDelegate <NSObject>
+
+-(void)changeHeightChangeUIMethod;
+
+@end
+
 @interface VoteView : UIView
+
+@property (nonatomic, weak) id<VoteViewDelegate> delegate;
 
 -(void)loadVoteTableViewWithVotesArray:(NSArray *)votes type:(SelectType)type viewHeight:(ViewHeightBlock)block;
 

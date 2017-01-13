@@ -18,17 +18,21 @@
 
 @property (nonatomic, strong) NSArray *voteArr;//保存选项的数组
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;//表。。。
 
 @property (nonatomic, strong) NSMutableArray *heightsArr;//保存cell高度的数组
 
 @property (nonatomic, strong) NSMutableArray *selectedCellArr;//保存被选中的选项
 
-@property (nonatomic, assign) BOOL isSubmit;
+@property (nonatomic, assign) BOOL isSubmit;//是否是提交状态
 
-@property (nonatomic, assign) CGFloat maxHeight;
+@property (nonatomic, assign) CGFloat maxHeight;//视图最大高度
 
-@property (nonatomic, strong) UIButton *submitBtn;
+@property (nonatomic, strong) UIButton *submitBtn;//提交投票按钮
+
+@property (nonatomic, copy) ViewHeightBlock heightBlock;//改变视图大小用的
+
+@property (nonatomic, assign) SelectType voteType;
 @end
 
 @implementation VoteView
@@ -37,10 +41,12 @@
 
 -(void)loadVoteTableViewWithVotesArray:(NSArray *)votes type:(SelectType)type viewHeight:(ViewHeightBlock)block
 {
+    _voteType = type;
     _voteArr = nil;
     if (votes) {
         _voteArr = [[NSArray alloc] initWithArray:votes];
     }
+    self.heightBlock = block;
     CGFloat tableViewHeight = [self getTableViewContentHeightWithVotes:_voteArr];
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0,SCREEN_WIDTH, tableViewHeight)];
@@ -53,7 +59,6 @@
         [self addSubview:_tableView];
     }
     block(tableViewHeight);
-    
     
 //    UIView *bootomView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_tableView.frame), SCREEN_WIDTH, 10)];
 //    bootomView.backgroundColor = [UIColor blueColor];
@@ -115,6 +120,7 @@
     if (cell == nil) {
         cell = [[VoteTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
+    cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self;
     VoteCellModel *model = _voteArr[indexPath.row];
@@ -209,6 +215,13 @@
         
         _submitBtn.backgroundColor = [UIColor lightGrayColor];
         [_submitBtn setTitle:@"已投票" forState:UIControlStateNormal];
+        
+        _heightBlock(_maxHeight);
+        
+        if ([self.delegate respondsToSelector:@selector(changeHeightChangeUIMethod)])
+        {
+            [self.delegate changeHeightChangeUIMethod];
+        }
     }
 }
 

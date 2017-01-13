@@ -30,6 +30,7 @@
 
 @property (nonatomic, assign) BOOL isSubmit;
 
+
 @end
 
 @implementation VoteTableViewCell
