@@ -142,29 +142,24 @@
 
 //点击选项按钮
 -(void)tapCheckBtn:(UIButton *)sender
-{
-    if (sender.selected == YES)
+{  
+    if ([self.delegate respondsToSelector:@selector(selectChackBtnWithCellIndex:)])
     {
-        sender.selected = NO;
-        [sender setImage:[UIImage imageNamed:@"sortDeselect"] forState:UIControlStateNormal];
-        
-        if ([self.delegate respondsToSelector:@selector(deSelectChackBtnWithCellIndex:)])
-        {
-            [self.delegate deSelectChackBtnWithCellIndex:_cellIndex];
-        }
-    }
-    else
-    {
-        sender.selected = YES;
-        [sender setImage:[UIImage imageNamed:@"sortSelect"] forState:UIControlStateNormal];
-        
-        if ([self.delegate respondsToSelector:@selector(selectChackBtnWithCellIndex:)])
-        {
-            [self.delegate selectChackBtnWithCellIndex:_cellIndex];
-        }
+        [self.delegate selectChackBtnWithCellIndex:_cellIndex];
     }
 }
 
+-(void)setIsSelect:(BOOL)isSelect
+{
+    if (isSelect == YES)
+    {
+        [_chackBtn setImage:[UIImage imageNamed:@"sortSelect"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        [_chackBtn setImage:[UIImage imageNamed:@"sortDeselect"] forState:UIControlStateNormal];
+    }
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];

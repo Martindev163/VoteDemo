@@ -16,14 +16,13 @@
 
 -(void)selectChackBtnWithCellIndex:(NSInteger)index;
 
--(void)deSelectChackBtnWithCellIndex:(NSInteger)index;
-
 @end
 
 @interface VoteTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) id<VoteCellDelegate> delegate;
 
+@property (nonatomic, assign) BOOL isSelect;//选项按钮是否
 
 -(void)setSubViewsWithVoteModel:(VoteCellModel *)model cellIndex:(NSInteger)index cellHight:(CGFloat)height isSubmit:(BOOL)confirm;
 

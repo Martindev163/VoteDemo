@@ -17,9 +17,9 @@
 
 //@property (nonatomic, strong) UIView *testView;
 @property (nonatomic, strong) VoteView *voteView;
-@property (weak, nonatomic) IBOutlet UIView *topView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *height;
-@property (weak, nonatomic) IBOutlet UIView *bottomView;
+@property (weak, nonatomic) IBOutlet UIView *topView;//oteView的父视图
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *height;//包含VoteView的父视图的高度约束
+@property (weak, nonatomic) IBOutlet UIView *bottomView;//作为UI比较的一个视图
 @end
 
 @implementation ViewController
@@ -30,11 +30,12 @@
     
     _voteView = [[VoteView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
     _voteView.delegate = self;
-    [_voteView loadVoteTableViewWithVotesArray:self.voteArr type:SingleSelectType viewHeight:^(CGFloat ViewHeight) {
+    [_voteView loadVoteTableViewWithVotesArray:self.voteArr type:MultiSelectType viewHeight:^(CGFloat ViewHeight) {
         CGRect tempFrame = _voteView.frame;
         tempFrame.size.height = ViewHeight;
         _voteView.frame = tempFrame;
     }];
+    _voteView.canSelects = 3;
     _height.constant = _voteView.frame.size.height;
     [self.view setNeedsLayout];
     [self.topView addSubview:_voteView];

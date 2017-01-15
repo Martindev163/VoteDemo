@@ -33,6 +33,9 @@
 @property (nonatomic, copy) ViewHeightBlock heightBlock;//改变视图大小用的
 
 @property (nonatomic, assign) SelectType voteType;
+
+@property (nonatomic, strong) NSString *titleStr;
+@property (nonatomic, strong) UILabel *titleLab;
 @end
 
 @implementation VoteView
@@ -123,6 +126,14 @@
     cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self;
+    if ([_selectedCellArr containsObject:[NSNumber numberWithInteger:indexPath.row]])
+    {
+        cell.isSelect = YES;
+    }
+    else
+    {
+        cell.isSelect = NO;
+    }
     VoteCellModel *model = _voteArr[indexPath.row];
     [cell setSubViewsWithVoteModel:model cellIndex:indexPath.row cellHight:[_heightsArr[indexPath.row] floatValue] isSubmit:_isSubmit];
     return cell;
@@ -145,27 +156,10 @@
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH - 20, TableHeadViewHeight)];
     bgView.backgroundColor = [UIColor colorWithRed:220/255.0 green:220/255.0 blue:220/255.0 alpha:1.0];
     [headView addSubview:bgView];
-    NSString *titleStr = [NSString new];
-    switch (type) {
-        case SingleSelectType:
-        {
-            titleStr = @"单选投票（最多可选1项）";
-        }
-            break;
-        case MultiSelectType:
-        {
-            titleStr = @"多选投票（最多可选20项）";
-        }
-            break;
-            
-        default:
-            break;
-    }
     
-    UILabel *titleLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, SCREEN_WIDTH - 30, TableHeadViewHeight)];
-    titleLab.text = titleStr;
-    titleLab.font = [UIFont systemFontOfSize:14];
-    [bgView addSubview:titleLab];
+    _titleLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, SCREEN_WIDTH - 30, TableHeadViewHeight)];
+    _titleLab.font = [UIFont systemFontOfSize:14];
+    [bgView addSubview:_titleLab];
     
     return headView;
 }
@@ -184,6 +178,28 @@
     return footView;
 }
 
+-(void)setCanSelects:(NSInteger)canSelects
+{
+    _canSelects = canSelects;
+    _titleStr = [NSString new];
+    switch (_voteType) {
+        case SingleSelectType:
+        {
+            _titleStr = @"单选投票（最多可选1项）";
+        }
+            break;
+        case MultiSelectType:
+        {
+            _titleStr = [NSString stringWithFormat:@"多选投票(最多可选%zi项)",canSelects];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    _titleLab.text = _titleStr;
+}
+
 //记录选中取消选中了那些选项
 -(void)selectChackBtnWithCellIndex:(NSInteger)index
 {
@@ -198,9 +214,35 @@
     }
     if (isHas == NO)
     {
-        [self.selectedCellArr addObject:[NSNumber numberWithInteger:index]];
+        if (_voteType == SingleSelectType)
+        {
+            [self.selectedCellArr removeAllObjects];
+            [self.selectedCellArr addObject:[NSNumber numberWithInteger:index]];
+        }
+        else
+        {
+            if (self.selectedCellArr.count >= _canSelects && self.selectedCellArr.count>0)
+            {
+                [self.selectedCellArr removeObjectAtIndex:0];
+                [self.selectedCellArr addObject:[NSNumber numberWithInteger:index]];
+            }
+            else
+            {
+                [self.selectedCellArr addObject:[NSNumber numberWithInteger:index]];
+            }
+            
+        }
     }
+    else
+    {
+        if (_voteType == MultiSelectType)
+        {
+            [self.selectedCellArr removeObject:[NSNumber numberWithInteger:index]];
+        }
+    }
+    [self.tableView reloadData];
 }
+
 
 //点击确认投票
 -(void)tapSubmitBtnAction
@@ -224,23 +266,5 @@
         }
     }
 }
-
--(void)deSelectChackBtnWithCellIndex:(NSInteger)index
-{
-    BOOL isHas = NO;
-    
-    for (NSNumber *num in self.selectedCellArr)
-    {
-        if (num.integerValue == index)
-        {
-            isHas = YES;
-        }
-    }
-    if (isHas == YES)
-    {
-        [self.selectedCellArr removeObject:[NSNumber numberWithInteger:index]];
-    }
-}
-
 
 @end
